@@ -1,14 +1,25 @@
 import re
 import os
 import datetime
+import time
 
-def validate(date_text):
+#Function to validate Date
+def validate(input):
   try:
-    datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    datetime.datetime.strptime(input, '%Y-%m-%d')
+    return "Valid"
   except ValueError:
-    #raise ValueError("Incorrect data format, should be YYYY-MM-DD")
     return "Invalid"
 
+#Function to validate Time
+def isTimeFormat(input):
+  try:
+    time.strptime(input, '%H:%M:%S,%f')
+    return "Valid"
+  except ValueError:
+    return "Invalid"
+
+#Function which calculate Network Block and Host ID from IP adddress and Subnet Mask
 def net_block(ip,subnet):
   ip_bin = '.'.join([bin(int(x)+256)[3:] for x in ip.split('.')])
 
@@ -30,10 +41,11 @@ def net_block(ip,subnet):
   return {"network_block": r1,
           "host_id": r2}
 
+#Function to find the valid logs from the given input
 def logs(input_string):
-
+  #Approved log level list
   log_list = ['ERROR','INFO','DEBUG']
-  final_string = ''
+  final_string = '<Date> <Log Level> <User> <Main Function> <Sub Function> <Logged Message>\n'
   for row in input_string.splitlines()[1:]:
 
     flag = 0
@@ -42,27 +54,43 @@ def logs(input_string):
     ms = re.search('([\w\d\s\-]+)\s+([\w:,]+)\s+([\w]+)\s+([\w\s\]\[\:\_]+)\s+', row_string)
     date = ms.group(1)
     res = validate(date)
+
+    #Date validation
     if res == 'Invalid':
       flag = 1
+
     time = ms.group(2)
+    time_res = isTimeFormat(time)
+
+    #Time validation
+    if time_res == 'Invalid':
+      flag = 1
+
     log_level = ms.group(3)
     string = ms.group(4)
     string = string.split("]")
     user_data = string[0].split(":")
     user = user_data[0][1:]
+
+    #Checking for User validation
+    if (' ' in user) == True:
+      flag = 1
     function = user_data[1]
     sub_func = ''
     if len(user_data) == 3:
       sub_func = ' ' + user_data[2]
 
+    #Log level validation
     if log_level not in log_list:
       flag = 1
 
-    if flag == 0:
-      final_string += date + ' ' + log_level + ' ' + user + ' ' + function + sub_func + ' ' + message + '\n'
+    if flag == 0: 
+      final_string += date + ' ' + time + ' ' + log_level + ' ' + user + ' ' + function + sub_func + ' ' + message + '\n'
 
   #print final_string
-  return {"valid_logs": final_string}
+  final_string2 = ''
+  return {"valid_logs": final_string2}
+  
 
 string=("<DATE> <LOG LEVEL> [<USER>:<FUNCTION>(:<SUBFUNCTION>)] <MESSAGE>\n"
 "2003-07-08 16:49:45,896 ERROR [user1:mainfunction:subfunction] We have a problem\n"
@@ -71,6 +99,7 @@ string=("<DATE> <LOG LEVEL> [<USER>:<FUNCTION>(:<SUBFUNCTION>)] <MESSAGE>\n"
 "2003-07-08 16:45,896 ERROR [user1:mainfunction:subfunction] We have a problem\n"
 "2003-07-085 16:45:13,896 ERROR [best user ever:mainfunction:subfunction] We have a problem")
 
+
 #net_block('192.168.2.1','255.255.255.0')
-#logs(string)
+logs(string)
 
