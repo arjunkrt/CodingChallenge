@@ -13,7 +13,7 @@ Clone the git repository using the command:
 
 git clone https://github.com/arjunkrt/CodingChallenge.git
 
-Once that is done go inside the folder and inside the FlaskApp folder run the app.py
+Once that is done go inside the Coding Challenge folder and then go inside the FlaskApp folder run the app.py
 using the command python app.py
 
 Once that is done you can directly goto the weburl : http://localhost:5000/ to run the application
@@ -37,10 +37,12 @@ Subnet Mask: 255.255.255.0
 Output will return the Network Block: 192.168.2.0
 Host ID: 0.0.0.1
 
-If you give invalid 
+If you give invalid IP address nothing is returned.
+
 For Case 2.
 
 Log Input:
+
 <DATE> <LOG LEVEL> [<USER>:<FUNCTION>(:<SUBFUNCTION>)] <MESSAGE>
 2003-07-08 16:49:45,896 ERROR [user1:mainfunction:subfunction] We have a problem
 2003-07-08 16:49:46,896 INFO [user1:mainfunction] We don't have a problem
@@ -55,9 +57,9 @@ Log output:
 
 It will display the Date, Log level, user, Main function, sub function and logged messages seperated by space.
 Following validations are done here:
-Log level will be from either of these 3: ERROR, INFO and DEBUG
-Time should have minutes and seconds, if not that log is ignored
-User shouldn't have spaces in between
+Log level will be from either of these 3: ERROR, INFO and DEBUG.
+Time should have minutes and seconds, if not that log is ignored.
+User shouldn't have spaces in between.
 Subfunction is not mandatory
 
 
